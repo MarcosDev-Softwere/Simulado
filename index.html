@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulado Náutico - Motonauta</title>
+  <style>
+
+    body { 
+  font-family: Arial, sans-serif; 
+  margin: 20px; 
+  background: url('./LanchaBoatLux.png') no-repeat center center fixed;
+  background-size: cover;
+  line-height: 1.6;
+}
+
+    /*body { 
+      font-family: Arial, sans-serif; 
+      margin: 20px; 
+      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+      line-height: 1.6;
+    }*/
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    h1 {
+      text-align: center;
+      color: hsl(210, 2%, 17%);
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+    .question { 
+      margin-bottom: 30px; 
+      padding: 20px; 
+      border: 1px solid #ddd; 
+      background: #fff; 
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .question h3 { 
+      margin-top: 0; 
+      color: #1976d2;
+      border-bottom: 2px solid #e3f2fd;
+      padding-bottom: 10px;
+    }
+    .options label { 
+      display: block; 
+      margin: 8px 0; 
+      padding: 8px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+    .options label:hover {
+      background-color: #f5f5f5;
+    }
+    .options input[type="radio"] {
+      margin-right: 8px;
+    }
+    button {
+      background: #1976d2;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 10px;
+      transition: background-color 0.2s;
+    }
+    button:hover {
+      background: #1565c0;
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .feedback { 
+      margin-top: 15px; 
+      font-weight: bold; 
+      display: none; 
+      padding: 15px;
+      border-radius: 4px;
+    }
+    .correct { 
+      color: #2e7d32; 
+      background: #e8f5e8;
+      border: 1px solid #4caf50;
+    }
+    .incorrect { 
+      color: #c62828; 
+      background: #ffebee;
+      border: 1px solid #f44336;
+    }
+    .score-container {
+      text-align: center;
+      margin: 30px 0;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .score-button {
+      background: #4caf50;
+      font-size: 16px;
+      padding: 12px 24px;
+    }
+    .score-button:hover {
+      background: #45a049;
+    }
+    #final-score {
+      font-size: 18px;
+      margin-top: 15px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🚤 Simulado Náutico - Motonauta BootLux</h1>
+    
+    <div class="score-container">
+      <button class="score-button" onclick="calcularPontuacao()">📊 Ver Pontuação Final</button>
+      <div id="final-score"></div>
+    </div>
+
+    <div class="question" id="q1">
+      <h3>Questão 1: A curva de Boutakow é usada:</h3>
+      <div class="options">
+        <label><input type="radio" name="q1" value="a"> a) para sair em capa</label>
+        <label><input type="radio" name="q1" value="b"> b) para guinar, para o bordo contrário ao náufrago</label>
+        <label><input type="radio" name="q1" value="c"> c) em caso de abandono</label>
+        <label><input type="radio" name="q1" value="d"> d) para recolhimento de homem ao mar</label>
+      </div>
+      <button onclick="verificarResposta('q1', 'd', 'A curva de Boutakow é uma manobra usada para voltar rapidamente ao ponto onde ocorreu a queda de um homem na água, facilitando seu resgate.')">Ver resposta</button>
+      <div class="feedback" id="feedback-q1"></div>
+    </div>
+
+    <div class="question" id="q2">
+      <h3>Questão 2: Caso seja verificado que, após ter feito a respiração boca a boca, o coração da vítima ainda não está batendo, o procedimento correto será:</h3>
+      <div class="options">
+        <label><input type="radio" name="q2" value="a"> a) continuar a respiração até ela respirar sozinha</label>
+        <label><input type="radio" name="q2" value="b"> b) fazer massagem cardíaca externa</label>
+        <label><input type="radio" name="q2" value="c"> c) aquecer a vítima</label>
+        <label><input type="radio" name="q2" value="d"> d) esperar alguns segundos e verificar novamente</label>
+      </div>
+      <button onclick="verificarResposta('q2', 'b', 'A massagem cardíaca externa é essencial para restabelecer a circulação sanguínea em caso de parada cardíaca.')">Ver resposta</button>
+      <div class="feedback" id="feedback-q2"></div>
+    </div>
+
+    <div class="question" id="q3">
+      <h3>Questão 3: Estão dispensadas de dotar embarcações de sobrevivência:</h3>
+      <div class="options">
+        <label><input type="radio" name="q3" value="a"> a) embarcações de pesca esportiva</label>
+        <label><input type="radio" name="q3" value="b"> b) embarcações empregadas em navegação costeira</label>
+        <label><input type="radio" name="q3" value="c"> c) embarcações de esporte e recreio</label>
+        <label><input type="radio" name="q3" value="d"> d) embarcações empregadas na navegação interior</label>
+      </div>
+      <button onclick="verificarResposta('q3', 'd', 'Embarcações que operam em águas interiores têm requisitos diferenciados e podem estar dispensadas de certos equipamentos obrigatórios para navegação marítima.')">Ver resposta</button>
+      <div class="feedback" id="feedback-q3"></div>
+    </div>
+
+    <div class="question" id="q4">
+      <h3>Questão 4: A penalidade por conduzir embarcações em estado de embriaguez é:</h3>
+      <div class="options">
+        <label><input type="radio" name="q4" value="a"> a) suspensão definitiva do Certificado de Habilitação</label>
+        <label><input type="radio" name="q4" value="b"> b) suspensão do Certificado de Habilitação até noventa dias</label>
+        <label><input type="radio" name="q4" value="c"> c) suspensão do Certificado de Habilitação até cento e vinte dias. A reincidência sujeitará o infrator à pena de cancelamento do certificado de Habilitação</label>
+        <label><input type="radio" name="q4" value="d"> d) cancelamento do Certificado de Habilitação</label>
+      </div>
+      <button onclick="verificarResposta('q4', 'c', 'A legislação prevê suspensão temporária, e reincidência pode levar ao cancelamento do certificado.')">Ver resposta</button>
+      <div class="feedback" id="feedback-q4"></div>
+    </div>
+
+    <div class="question" id="q5">
+      <h3>Questão 5: Embarcações com comprimento inferior a 12 metros deverão ter sua luz de mastro com alcance de:</h3>
+      <div class="options">
+        <label><input type="radio" name="q5" value="a"> a) 4 milhas</label>
+        <label><input type="radio" name="q5" value="b"> b) 1 milha</label>
+        <label><input type="radio" name="q5" value="c"> c) 2 milhas</label>
+        <label><input type="radio" name="q5" value="d"> d) 3 milhas</label>
+      </div>
+      <button onclick="verificarResposta('q5', 'c', 'A luz de mastro deve ser visível a uma distância mínima de 2 milhas para embarcações menores que 12 metros.')">Ver resposta</button>
+      <div class="feedback" id="feedback-q5"></div>
+    </div>
+
+    <div class="question" id="q6">
+      <h3>Questão 6: A numeração de canais é uma só para todo o balizamento, quer se trate de boias cegas, boias luminosas ou farolete. O balizamento encarnado e o verde receberão, respectivamente, números:</h3>
+      <div class="options">
+        <label><input type="radio" name="q6" value="a"> a) sequenciais iniciando do zero</label>
+        <label><input type="radio" name="q6" value="b"> b) crescentes a partir do interior do canal</label>
+        <label><input type="radio" name="q6" value="c"> c) pares e ímpares</label>
+        <label><input type="radio" name="q6" value="d"> d) ímpares e pares</label>
+      </div>
+      <button onclick="verificarResposta('q6', 'd', 'O balizamento segue o sistema IALA, em que as boias encarnadas recebem números ímpares e as verdes recebem números pares.')">Ver resposta</button>
+      <div class="feedback" id="feedback-q6"></div>
+    </div>
+
+    <div class="question" id="q7">
+      <h3>Questão 7: Uma embarcação de esporte e recreio deverá evitar cruzar uma via de tráfego, tanto quanto possível, porém, se for necessário tal manobra, deverá fazer:</h3>
+      <div class="options">
+        <label><input type="radio" name="q7" value="a"> a) sempre com a proa voltada para a sinalização de boreste</label>
+        <label><input type="radio" name="q7" value="b"> b) de forma a cruzar perpendicularmente a via de tráfego</label>
+        <label><input type="radio" name="q7" value="c"> c) sempre fazendo alterações constantes de direção</label>
+        <label><input type="radio" name="q7" value="d"> d) sempre em baixa velocidade e apitando</label>
+      </div>
+      <button onclick="verificarResposta('q7', 'b', 'Cruzar perpendicularmente minimiza o tempo em que a embarcação permanece na via de tráfego, reduzindo riscos.')">Ver resposta</button>
+      <div class="feedback" id="feedback-q7"></div>
+    </div>
+
+    <div class="question" id="q8">
+      <h3>Questão 8: Todo aquele com habilitação certificada pela autoridade marítima para operar embarcações de esporte e recreio, em caráter não profissional, é:</h3>
+      <div class="options">
+        <label><input type="radio" name="q8" value="a"> a) Semi profissional</label>
+        <label><input type="radio" name="q8" value="b"> b) tripulante</label>
+        <label><input type="radio" name="q8" value="c"> c) aquaviário</label>
+        <label><input type="radio" name="q8" value="d"> d) amador</label>
+      </div>
+      <button onclick="verificarResposta('q8', 'd', 'Habilitação para uso recreativo e não profissional é denominada habilitação amadora.')">Ver resposta</button>
+      <div class="feedback" id="feedback-q8"></div>
+    </div>
+
+    <div class="question" id="q9">
+      <h3>Questão 9: A identificação do balizamento, à noite, é feita por:</h3>
+      <div class="options">
+        <label><input type="radio" name="q9" value="a"> a) ritmo de apresentação e cores das luzes</label>
+        <label><input type="radio" name="q9" value="b"> b) números de repetições e brilho</label>
+        <label><input type="radio" name="q9" value="c"> c) cores das luzes e números de repetições</label>
+        <label><input type="radio" name="q9" value="d"> d) brilho e ritmo de apresentação</label>
+      </div>
+      <button onclick="verificarResposta('q9', 'a', 'As boias e balizas são identificadas pela cor e pela sequência (ritmo) das luzes que exibem.')">Ver resposta</button>
+      <div class="feedback" id="feedback-q9"></div>
+    </div>
+
+    <div class="question" id="q10">
+      <h3>Questão 10: Uma embarcação miúda só poderá ser classificada para a navegação do tipo:</h3>
+      <div class="options">
+        <label><input type="radio" name="q10" value="a"> a) Interior</label>
+        <label><input type="radio" name="q10" value="b"> b) Oceânica</label>
+        <label><input type="radio" name="q10" value="c"> c) Costeira</label>
+        <label><input type="radio" name="q10" value="d"> d) de Mar Aberto</label>
+      </div>
+      <button onclick="verificarResposta('q10', 'a', 'Embarcações miúdas têm restrições e são classificadas para navegação em águas interiores.')">Ver resposta</button>
+      <div class="feedback" id="feedback-q10"></div>
+    </div>
+
+    <div class="question" id="q11">
+      <h3>Questão 11: É considerada uma embarcação alcançadora aquela que se aproxima da outra vindo:</h3>
+      <div class="options">
+        <label><input type="radio" name="q11" value="a"> a) na direção oposta e com maior velocidade</label>
+        <label><input type="radio" name="q11" value="b"> b) de uma direção de mais de 67,5 graus para a ré do través dessa última e com maior velocidade</label>
+        <label><input type="radio" name="q11" value="c"> c) de uma direção de mais de 22,5 graus para a ré do través dessa última e com maior velocidade</label>
+        <label><input type="radio" name="q11" value="d"> d) na mesma direção da outra e com a mesma velocidade</label>
+      </div>
+      <button onclick="verificarResposta('q11', 'c', 'Definição técnica que indica risco de abalroamento e determina regras de prioridade.')">Ver resposta</button>
+      <div class="feedback" id="feedback-q11"></div>
+    </div>
+
+    <div class="question" id="q12">
+      <h3>Questão 12: Ao me deparar com uma vítima com fratura, o que não devo fazer?</h3>
+      <div class="options">
+        <label><input type="radio" name="q12" value="a"> a) utilizar uma tala para imobilizar o membro quebrado</label>
+        <label><input type="radio" name="q12" value="b"> b) se for a perna, deve-se preferir imobilizá-la esticada</label>
+        <label><input type="radio" name="q12" value="c"> c) tentar colocar o osso no local</label>
+        <label><input type="radio" name="q12" value="d"> d) imobilizar o membro quebrado</label>
+      </div>
+      <button onclick="verificarResposta('q12', 'c', 'Realocar ossos pode piorar a lesão e causar mais danos, portanto nunca se deve fazer isso.')">Ver resposta</button>
+      <div class="feedback" id="feedback-q12"></div>
+    </div>
+
+    <div class="question" id="q13">
+      <h3>Questão 13: São as primeiras providências tomadas em caso de acidentes a bordo, para evitar o agravamento da situação, até a chegada de socorro profissional:</h3>
+      <div class="options">
+        <label><input type="radio" name="q13" value="a"> a) atendimento de emergência</label>
+        <label><input type="radio" name="q13" value="b"> b) primeiros socorros</label>
+        <label><input type="radio" name="q13" value="c"> c) atendimento imediato</label>
+        <label><input type="radio" name="q13" value="d"> d) ações de socorro</label>
+      </div>
+      <button onclick="verificarResposta('q13', 'b', 'São medidas iniciais que podem salvar vidas e evitar complicações.')">Ver resposta</button>
+      <div class="feedback" id="feedback-q13"></div>
+    </div>
+
+    <div class="question" id="q14">
+      <h3>Questão 14: De acordo com a Regra 6 do RIPEAM, assinale a alternativa que NÃO corresponde a um fator que deve ser considerado por todas as embarcações ao determinar-se a velocidade de segurança:</h3>
+      <div class="options">
+        <label><input type="radio" name="q14" value="a"> a) grau de visibilidade</label>
+        <label><input type="radio" name="q14" value="b"> b) potência máxima do motor da embarcação</label>
+        <label><input type="radio" name="q14" value="c"> c) a capacidade de manobra da embarcação, com atenção especial quanto a sua distância de parada e as suas qualidades de giro nas condições predominantes</label>
+        <label><input type="radio" name="q14" value="d"> d) densidade de tráfego, inclusive concentrações de pesqueiros ou quaisquer outras embarcações</label>
+      </div>
+      <button onclick="verificarResposta('q14', 'b', 'A potência do motor não é fator para determinar velocidade segura; os outros fatores são essenciais para evitar acidentes.')">Ver resposta</button>
+      <div class="feedback" id="feedback-q14"></div>
+    </div>
+
+    <div class="question" id="q15">
+      <h3>Questão 15: O que ocorre com a umidade relativa quando a temperatura do ar aumenta?</h3>
+      <div class="options">
+        <label><input type="radio" name="q15" value="a"> a) A umidade relativa diminui</label>
+        <label><input type="radio" name="q15" value="b"> b) A umidade relativa aumenta</label>
+        <label><input type="radio" name="q15" value="c"> c) A umidade relativa independe da temperatura</label>
+        <label><input type="radio" name="q15" value="d"> d) não é possível dizer nada sobre isso</label>
+      </div>
+      <button onclick="verificarResposta('q15', 'a', 'Ar quente pode conter mais vapor d\'água, então a umidade relativa cai se a quantidade absoluta de vapor não aumentar.')">Ver resposta</button>
+      <div class="feedback" id="feedback-q15"></div>
+    </div>
+
+    <div class="question" id="q16">
+      <h3>Questão 16: O apito curto tem a duração de:</h3>
+      <div class="options">
+        <label><input type="radio" name="q16" value="a"> a) 4 a 6 segundos</label>
+        <label><input type="radio" name="q16" value="b"> b) aproximadamente 1 segundo</label>
+        <label><input type="radio" name="q16" value="c"> c) 1 minuto</label>
+        <label><input type="radio" name="q16" value="d"> d) 2 segundos</label>
+      </div>
+      <button onclick="verificarResposta('q16', 'b', 'Apitos curtos são usados em sinais de manobra e têm duração padrão de cerca de 1 segundo.')">Ver resposta</button>
+      <div class="feedback" id="feedback-q16"></div>
+    </div>
+
+    <div class="question" id="q17">
+      <h3>Questão 17: Uma embarcação de esporte/recreio considerada de grande porte (iate) deverá fazer seu registro no(a):</h3>
+      <div class="options">
+        <label><input type="radio" name="q17" value="a"> a) ANTAQ</label>
+        <label><input type="radio" name="q17" value="b"> b) Tribunal Marítimo</label>
+        <label><input type="radio" name="q17" value="c"> c) Capitania dos Portos</label>
+        <label><input type="radio" name="q17" value="d"> d) Ministério dos Transportes</label>
+      </div>
+      <button onclick="verificarResposta('q17', 'b', 'Iates e embarcações de grande porte são registradas no Tribunal Marítimo.')">Ver resposta</button>
+      <div class="feedback" id="feedback-q17"></div>
+    </div>
+
+    <div class="question" id="q18">
+      <h3>Questão 18: Durante a noite, um navegante está manobrando uma lancha em movimento e avista a luz verde de outra lancha que está cruzando seu rumo, com risco de abalroamento. Ele deverá:</h3>
+      <div class="options">
+        <label><input type="radio" name="q18" value="a"> a) guinar para boreste</label>
+        <label><input type="radio" name="q18" value="b"> b) guinar para bombordo</label>
+        <label><input type="radio" name="q18" value="c"> c) manter rumo e velocidade</label>
+        <label><input type="radio" name="q18" value="d"> d) aumentar sua velocidade</label>
+      </div>
+      <button onclick="verificarResposta('q18', 'c', 'Conforme regras, o navegante que vê luz verde da outra embarcação deve manter seu rumo e velocidade.')">Ver resposta</button>
+      <div class="feedback" id="feedback-q18"></div>
+    </div>
+
+    <div class="question" id="q19">
+      <h3>Questão 19: No balizamento fluvial e lacustre, caso uma travessia muito difícil ou trecho do rio realmente crítico à navegação exijam sinais luminosos, os sinais da margem direita exibirão:</h3>
+      <div class="options">
+        <label><input type="radio" name="q19" value="a"> a) Luz amarela</label>
+        <label><input type="radio" name="q19" value="b"> b) Luz branca</label>
+        <label><input type="radio" name="q19" value="c"> c) Luz verde</label>
+        <label><input type="radio" name="q19" value="d"> d) Luz encarnada</label>
+      </div>
+      <button onclick="verificarResposta('q19', 'c', 'No balizamento fluvial, a margem direita é marcada com luzes verdes.')">Ver resposta</button>
+      <div class="feedback" id="feedback-q19"></div>
+    </div>
+
+    <div class="question" id="q20">
+      <h3>Questão 20: Em um naufrágio, as condições adversas e a limitação de recursos de toda espécie exigem cuidados especiais com a saúde. É necessário economizar energia, não fazer esforços e não falar desnecessariamente. Porém, é conveniente movimentar-se com regularidade, a fim de:</h3>
+      <div class="options">
+        <label><input type="radio" name="q20" value="a"> a) evitar a hipotermia</label>
+        <label><input type="radio" name="q20" value="b"> b) evitar o tédio</label>
+        <label><input type="radio" name="q20" value="c"> c) manter o bom humor</label>
+        <label><input type="radio" name="q20" value="d"> d) manter a circulação sanguínea</label>
+      </div>
+      <button onclick="verificarResposta('q20', 'd', 'Movimentar-se evita problemas circulatórios e ajuda a conservar a saúde em situação crítica.')">Ver resposta</button>
+      <div class="feedback" id="feedback-q20"></div>
+    </div>
+
+    <div class="score-container">
+      <button class="score-button" onclick="calcularPontuacao()">📊 Ver Pontuação Final</button>
+      <div id="final-score"></div>
+    </div>
+  </div>
+
+  <script>
+    let respostasReveladas = {};
+
+    function verificarResposta(id, respostaCorreta, explicacao) {
+      const opcoes = document.getElementsByName(id);
+      let selecionada = null;
+      for (let opcao of opcoes) {
+        if (opcao.checked) {
+          selecionada = opcao.value;
+          break;
+        }
+      }
+
+      if (!selecionada) {
+        alert('Por favor, selecione uma resposta antes de verificar.');
+        return;
+      }
+
+      const feedback = document.getElementById("feedback-" + id);
+      const botao = event.target;
+      
+      if (selecionada === respostaCorreta) {
+        feedback.innerHTML = "✅ <strong>Correto!</strong><br><br>" + explicacao;
+        feedback.className = "feedback correct";
+        respostasReveladas[id] = true;
+      } else {
+        feedback.innerHTML = "❌ <strong>Resposta incorreta!</strong><br><br><strong>Resposta correta:</strong> " + respostaCorreta + "<br><br>" + explicacao;
+        feedback.className = "feedback incorrect";
+        respostasReveladas[id] = false;
+      }
+      
+      feedback.style.display = "block";
+      botao.disabled = true;
+      botao.innerHTML = "Resposta revelada";
+    }
+
+    function calcularPontuacao() {
+      const totalQuestoes = 20;
+      const questoesRespondidas = Object.keys(respostasReveladas).length;
+      
+      if (questoesRespondidas === 0) {
+        alert('Responda pelo menos uma questão antes de ver a pontuação!');
+        return;
+      }
+
+      const acertos = Object.values(respostasReveladas).filter(resposta => resposta === true).length;
+      const erros = questoesRespondidas - acertos;
+      const percentual = ((acertos / totalQuestoes) * 100).toFixed(1);
+
+      let status = '';
+      let emoji = '';
+      if (percentual >= 80) {
+        status = 'Excelente! 🏆';
+        emoji = '🎉';
+      } else if (percentual >= 70) {
+        status = 'Bom desempenho! 👍';
+        emoji = '😊';
+      } else if (percentual >= 60) {
+        status = 'Aprovado! ✅';
+        emoji = '🙂';
+      } else {
+        status = 'Precisa estudar mais 📚';
+        emoji = '😐';
+      }
+
+      const scoreDiv = document.getElementById('final-score');
+      scoreDiv.innerHTML = `
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 2px solid #dee2e6;">
+          <h3 style="margin-top: 0; color: #495057;">${emoji} Resultado Final</h3>
+          <p style="font-size: 16px; margin: 10px 0;"><strong>Questões respondidas:</strong> ${questoesRespondidas} de ${totalQuestoes}</p>
+          <p style="font-size: 16px; margin: 10px 0; color: #28a745;"><strong>Acertos:</strong> ${acertos}</p>
+          <p style="font-size: 16px; margin: 10px 0; color: #dc3545;"><strong>Erros:</strong> ${erros}</p>
+          <p style="font-size: 18px; margin: 15px 0; font-weight: bold; color: #007bff;"><strong>Aproveitamento:</strong> ${percentual}%</p>
+          <p style="font-size: 16px; margin: 10px 0; font-weight: bold;">${status}</p>
+        </div>
+      `;
+      scoreDiv.style.display = 'block';
+      
+      // Scroll para a pontuação
+      scoreDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  </script>
+</body>
+</html>
